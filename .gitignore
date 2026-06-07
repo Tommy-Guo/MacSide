@@ -1,0 +1,12 @@
+# Xcode build output
+build/
+DerivedData/
+*.xcuserstate
+xcuserdata/
+
+# macOS
+.DS_Store
+
+# Release artifacts (upload these as GitHub Release assets, not git)
+*.dmg
+*.pkg
