@@ -8,24 +8,28 @@ struct SettingsView: View {
     @State private var showingAddAppSheet = false
 
     var body: some View {
-        NavigationSplitView {
+        HSplitView {
             sidebar
-        } detail: {
-            if let id = profileManager.selectedProfileID {
-                ProfileEditorView(profileID: id)
-                    .environmentObject(profileManager)
-            } else {
-                VStack(spacing: 12) {
-                    Image(systemName: "sidebar.left")
-                        .font(.system(size: 36))
-                        .foregroundColor(.secondary.opacity(0.4))
-                    Text("No Profile Selected")
-                        .foregroundColor(.secondary)
+                .frame(minWidth: 220, idealWidth: 250, maxWidth: 300)
+
+            Group {
+                if let id = profileManager.selectedProfileID {
+                    ProfileEditorView(profileID: id)
+                        .environmentObject(profileManager)
+                } else {
+                    VStack(spacing: 12) {
+                        Image(systemName: "sidebar.left")
+                            .font(.system(size: 36))
+                            .foregroundColor(.secondary.opacity(0.4))
+                        Text("No Profile Selected")
+                            .foregroundColor(.secondary)
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
-        .navigationSplitViewColumnWidth(min: 200, ideal: 220, max: 260)
+        .frame(minWidth: 700, minHeight: 480)
         .sheet(isPresented: $showingAddAppSheet) {
             AddAppProfileSheet { bundleID, name in
                 let profile = Profile(name: name, bundleIdentifier: bundleID)
@@ -35,7 +39,6 @@ struct SettingsView: View {
                 showingAddAppSheet = false
             }
         }
-        .frame(minWidth: 700, minHeight: 480)
     }
 
     private var sidebar: some View {
@@ -48,7 +51,7 @@ struct SettingsView: View {
                 }
             }
         }
-        .listStyle(.sidebar)
+        .listStyle(.plain)
         .safeAreaInset(edge: .bottom) {
             VStack(spacing: 0) {
                 Divider()

@@ -4,7 +4,7 @@ set -e
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 APP_NAME="MacSide"
 PROJECT_NAME="MacSide"
-VERSION="1.0"
+VERSION="1.1"
 DMG_NAME="${APP_NAME}-${VERSION}.dmg"
 TMP_DMG="${SCRIPT_DIR}/tmp_rw.dmg"
 
@@ -58,8 +58,8 @@ hdiutil create \
   "$TMP_DMG"
 
 # Mount it (no auto-open)
-MOUNT_OUTPUT=$(hdiutil attach -readwrite -noverify -noautoopen "$TMP_DMG")
-MOUNT_DIR=$(echo "$MOUNT_OUTPUT" | grep "/Volumes/" | awk '{print $NF}')
+MOUNT_DIR=$(hdiutil attach -readwrite -noverify -noautoopen "$TMP_DMG" \
+  | grep '/Volumes/' | sed 's|.*\(/Volumes/[^\t]*\)|\1|' | sed 's/[[:space:]]*$//')
 
 echo "▶ Configuring Finder window..."
 
@@ -80,14 +80,17 @@ tell application "Finder"
         close
         open
         update without registering applications
-        delay 2
+        delay 3
         close
     end tell
 end tell
 EOF
 
-# Unmount
-hdiutil detach "$MOUNT_DIR"
+# Give Finder a moment to fully release the volume
+sleep 3
+
+# Unmount (force if Finder is still holding a reference)
+hdiutil detach "$MOUNT_DIR" || hdiutil detach "$MOUNT_DIR" -force
 
 # Convert to compressed read-only
 echo "▶ Compressing..."
