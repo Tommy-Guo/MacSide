@@ -1,8 +1,16 @@
 # MacSide
 
+![image](https://i.imgur.com/5xZzhAp.png)
+
 MacSide is a lightweight native macOS utility that intercepts extra mouse buttons (M3–M7) and lets you remap them to keyboard shortcuts, system actions, app launches, URLs, or scroll — something macOS doesn't do out of the box.
 
 Built for Apple Silicon. No subscription, no telemetry, no App Store required.
+
+---
+
+![image](https://i.imgur.com/66VBOVp.png)
+![image](https://i.imgur.com/0ttPg7R.png)
+![image](https://i.imgur.com/rL4JxJk.png)
 
 ---
 
